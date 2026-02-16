@@ -182,7 +182,6 @@ footer{
 
 <div class="user-bar">
   <div class="user-info" id="userInfo"></div>
-  <a href="#" class="user-btn" id="adminBtn" style="display:none;">Admin</a>
   <a href="#" class="user-btn" id="logoutBtn">Logout</a>
 </div>
 
@@ -249,13 +248,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Lista email admin autorizzati
-const ADMIN_EMAILS = [
-  "askyy.plaitano@gmail.com",
-  "chinelloleonardo@gmail.com",
-  "tommasomansueti@gmail.com"
-];
-
 // Controlla se l'utente è loggato
 const userLogged = localStorage.getItem("user_logged");
 if(!userLogged){
@@ -266,23 +258,6 @@ if(!userLogged){
 const userName = localStorage.getItem("user_name") || "Utente";
 const userEmail = localStorage.getItem("user_email") || "";
 document.getElementById("userInfo").textContent = userName;
-
-// Mostra pulsante Admin solo se l'utente è admin
-if(userEmail && isAdmin(userEmail)){
-  document.getElementById("adminBtn").style.display = "inline-block";
-}
-
-// Pulsante Admin
-document.getElementById("adminBtn").onclick = (e) => {
-  e.preventDefault();
-  const userEmail = localStorage.getItem("user_email");
-  
-  if(isAdmin(userEmail)){
-    location.href = "fwuvibeo.html";
-  } else {
-    alert("Non hai i permessi necessari per accedere all'area Admin");
-  }
-};
 
 // Logout
 document.getElementById("logoutBtn").onclick = async (e) => {
@@ -301,13 +276,6 @@ document.getElementById("logoutBtn").onclick = async (e) => {
     location.href = "index.html";
   }
 };
-
-function isAdmin(email){
-  if(!email) return false;
-  // Se la lista è vuota, nessuno è admin (sicurezza)
-  if(ADMIN_EMAILS.length === 0) return false;
-  return ADMIN_EMAILS.includes(email);
-}
 </script>
 
 </body>
