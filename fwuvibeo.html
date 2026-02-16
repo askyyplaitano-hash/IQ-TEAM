@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel | IQ TEAM</title>
+<style>
+:root{
+  --blue:#0044ff;
+  --cyan:#00d4ff;
+  --glass:rgba(255,255,255,.06);
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,#000022,#000);
+  color:#fff;
+  padding:20px;
+  min-height:100vh;
+}
+.back-home{
+  position:fixed;
+  top:20px;
+  left:20px;
+  color:var(--cyan);
+  text-decoration:none;
+  font-size:1rem;
+  font-weight:600;
+  opacity:.9;
+  transition:.2s;
+  z-index:100;
+  padding:10px 20px;
+  background:rgba(0,68,255,.1);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  border:1px solid rgba(0,212,255,.3);
+}
+.back-home:hover{
+  opacity:1;
+  background:rgba(0,68,255,.2);
+  transform:translateX(-3px);
+}
+h1{
+  text-align:center;
+  padding:30px 20px 10px;
+  font-size:2.5rem;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 25px rgba(0,68,255,.7);
+}
+#adminInfo{
+  text-align:center;
+  color:rgba(255,255,255,.6);
+  font-size:.9rem;
+  margin-bottom:20px;
+}
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin:30px 20px;
+  flex-wrap:wrap;
+}
+.buttons button{
+  padding:12px 28px;
+  border-radius:999px;
+  border:none;
+  font-weight:700;
+  font-size:1rem;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  color:#000;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(0,68,255,.5);
+  transition:.2s;
+}
+.buttons button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 30px rgba(0,212,255,1);
+}
+.buttons button.danger{
+  background:linear-gradient(90deg,#ff0044,#ff4400);
+}
+.section{
+  max-width:1000px;
+  margin:20px auto;
+  display:none;
+}
+.section.active{
+  display:block;
+}
+.section-title{
+  text-align:center;
+  color:var(--cyan);
+  font-size:1.5rem;
+  margin-bottom:20px;
+  text-shadow:0 0 15px rgba(0,212,255,.7);
+}
+.empty-state{
+  text-align:center;
+  padding:40px;
+  color:rgba(255,255,255,.5);
+  font-style:italic;
+}
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border-radius:20px;
+  padding:20px 25px;
+  margin-bottom:15px;
+  border:1px solid rgba(0,212,255,.3);
+  box-shadow:0 0 25px rgba(0,68,255,.4);
+  transition:.3s;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 35px rgba(0,212,255,.6);
+}
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  flex-wrap:wrap;
+  gap:10px;
+}
+.card-date{
+  font-size:.85rem;
+  color:rgba(255,255,255,.6);
+}
+.card-user{
+  font-size:.85rem;
+  color:var(--cyan);
+  background:rgba(0,212,255,.1);
+  padding:4px 12px;
+  border-radius:20px;
+}
+.card-content{
+  color:#fff;
+  line-height:1.6;
+  word-wrap:break-word;
+  margin-bottom:15px;
+  font-size:1rem;
+}
+.card-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+.card-actions button{
+  padding:8px 20px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  color:#000;
+  cursor:pointer;
+  font-weight:600;
+  font-size:.9rem;
+  transition:.2s;
+}
+.card-actions button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px rgba(0,212,255,.8);
+}
+.card-actions button.delete{
+  background:linear-gradient(90deg,#ff0044,#ff4400);
+  color:#fff;
+}
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+.info-item{
+  background:rgba(0,0,0,.4);
+  padding:10px 15px;
+  border-radius:10px;
+  border:1px solid rgba(0,212,255,.2);
+}
+.info-label{
+  font-size:.8rem;
+  color:var(--cyan);
+  margin-bottom:4px;
+}
+.info-value{
+  font-size:1rem;
+  color:#fff;
+  word-break:break-all;
+}
+</style>
+</head>
+<body>
+
+<a href="home.html" class="back-home">← Home</a>
+
+<h1>Admin Panel</h1>
+<div id="adminInfo"></div>
+
+<div class="buttons">
+  <button onclick="showSection('anon')">Anonimi</button>
+  <button onclick="showSection('join')">Candidature</button>
+  <button class="danger" onclick="deleteAll()">Elimina tutto</button>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div id="anon" class="section">
+  <h2 class="section-title">Domande Anonime</h2>
+  <div id="anonContent"></div>
+</div>
+
+<div id="join" class="section">
+  <h2 class="section-title">Candidature Ricevute</h2>
+  <div id="joinContent"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA_jHlu5kKMEiYOMH7SIgaSp7EVQxS49sk",
+  authDomain: "iq-team-bs.firebaseapp.com",
+  projectId: "iq-team-bs",
+  storageBucket: "iq-team-bs.appspot.com",
+  messagingSenderId: "1071412276730",
+  appId: "1:1071412276730:web:376b87b114c04b54b98843"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Lista email admin autorizzati
+const ADMIN_EMAILS = [
+  // Aggiungi qui le email degli admin
+  // Esempio: "admin@tuodominio.com"
+];
+
+// Verifica che l'utente sia admin
+const userEmail = localStorage.getItem("user_email") || "";
+if(!userEmail || !isAdmin(userEmail)){
+  alert("Non hai i permessi necessari per accedere a questa pagina");
+  location.href = "home.html";
+}
+
+// Mostra email admin
+document.getElementById("adminInfo").textContent = `Admin: ${userEmail}`;
+
+let currentSection = 'anon';
+
+window.showSection = function(sec){
+  currentSection = sec;
+  document.getElementById("anon").classList.toggle('active', sec === 'anon');
+  document.getElementById("join").classList.toggle('active', sec === 'join');
+}
+
+window.logout = function(){
+  if(confirm("Vuoi effettuare il logout?")){
+    localStorage.removeItem("user_logged");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_name");
+    location.href = "index.html";
+  }
+}
+
+function isAdmin(email){
+  if(!email) return false;
+  if(ADMIN_EMAILS.length === 0) return false;
+  return ADMIN_EMAILS.includes(email);
+}
+
+function downloadPNG(text, filename = 'entry.png', type = 'anon'){
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  
+  canvas.width = 1200;
+  canvas.height = 800;
+  
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, '#000011');
+  gradient.addColorStop(1, '#000033');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.strokeStyle = "#00d4ff";
+  ctx.lineWidth = 8;
+  ctx.shadowColor = "#00d4ff";
+  ctx.shadowBlur = 35;
+  ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+  
+  ctx.shadowBlur = 0;
+  
+  ctx.fillStyle = "#00d4ff";
+  ctx.font = "bold 48px 'Segoe UI'";
+  ctx.textAlign = "center";
+  ctx.fillText("IQ | TEAM ヤ", canvas.width / 2, 110);
+  
+  ctx.strokeStyle = "#0044ff";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(200, 140);
+  ctx.lineTo(canvas.width - 200, 140);
+  ctx.stroke();
+  
+  ctx.font = "bold 28px 'Segoe UI'";
+  ctx.fillStyle = "#ffffff";
+  const typeText = type === 'anon' ? 'DOMANDA ANONIMA' : 'CANDIDATURA';
+  ctx.fillText(typeText, canvas.width / 2, 200);
+  
+  ctx.font = "24px 'Segoe UI'";
+  ctx.fillStyle = "#e0e0e0";
+  ctx.textAlign = "left";
+  
+  const lines = text.split("\n");
+  const maxWidth = canvas.width - 160;
+  let y = 280;
+  const lineHeight = 40;
+  
+  lines.forEach(line => {
+    const words = line.split(' ');
+    let currentLine = '';
+    
+    words.forEach((word, i) => {
+      const testLine = currentLine + word + ' ';
+      const metrics = ctx.measureText(testLine);
+      
+      if(metrics.width > maxWidth && currentLine !== ''){
+        ctx.fillText(currentLine, 80, y);
+        currentLine = word + ' ';
+        y += lineHeight;
+      } else {
+        currentLine = testLine;
+      }
+    });
+    
+    if(currentLine.trim() !== ''){
+      ctx.fillText(currentLine, 80, y);
+      y += lineHeight;
+    }
+  });
+  
+  ctx.font = "20px 'Segoe UI'";
+  ctx.fillStyle = "#666";
+  ctx.textAlign = "center";
+  const now = new Date().toLocaleString('it-IT');
+  ctx.fillText(`Generato il ${now}`, canvas.width / 2, canvas.height - 60);
+  
+  ctx.fillStyle = "#00d4ff";
+  ctx.fillRect(30, 30, 60, 8);
+  ctx.fillRect(30, 30, 8, 60);
+  ctx.fillRect(canvas.width - 90, 30, 60, 8);
+  ctx.fillRect(canvas.width - 38, 30, 8, 60);
+  ctx.fillRect(30, canvas.height - 38, 60, 8);
+  ctx.fillRect(30, canvas.height - 90, 8, 60);
+  ctx.fillRect(canvas.width - 90, canvas.height - 38, 60, 8);
+  ctx.fillRect(canvas.width - 38, canvas.height - 90, 8, 60);
+  
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// Anonimi
+onSnapshot(query(collection(db, "questions"), orderBy("data", "desc")), snap => {
+  const content = document.getElementById("anonContent");
+  content.innerHTML = "";
+  
+  if(snap.empty){
+    content.innerHTML = '<div class="empty-state">Nessuna domanda ricevuta</div>';
+    return;
+  }
+  
+  snap.forEach(d => {
+    const data = d.data();
+    const card = document.createElement("div");
+    card.className = "card";
+    
+    const userName = data.nome || "Anonimo";
+    const userEmail = data.email || "";
+    const userDisplay = userEmail ? `${userName} (${userEmail})` : userName;
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-date">${data.dataVisualizzata || data.data}</span>
+        <span class="card-user">${userDisplay}</span>
+      </div>
+      <div class="card-content">${data.testo}</div>
+      <div class="card-actions">
+        <button class="download-btn">Download PNG</button>
+        <button class="delete delete-btn">Elimina</button>
+      </div>
+    `;
+    
+    card.querySelector('.download-btn').onclick = () => {
+      downloadPNG(data.testo, `domanda-${d.id.substring(0,8)}.png`, 'anon');
+    };
+    
+    card.querySelector('.delete-btn').onclick = async () => {
+      if(confirm('Eliminare questa domanda?')){
+        await deleteDoc(doc(db, "questions", d.id));
+      }
+    };
+    
+    content.appendChild(card);
+  });
+});
+
+// Candidature
+onSnapshot(query(collection(db, "candidature"), orderBy("data", "desc")), snap => {
+  const content = document.getElementById("joinContent");
+  content.innerHTML = "";
+  
+  if(snap.empty){
+    content.innerHTML = '<div class="empty-state">Nessuna candidatura ricevuta</div>';
+    return;
+  }
+  
+  snap.forEach(d => {
+    const data = d.data();
+    const card = document.createElement("div");
+    card.className = "card";
+    
+    const userName = data.nome || "Utente";
+    const infoText = `GIOCO: ${data.game}\nETÀ: ${data.age}\nNOME: ${userName}\nTELEFONO: ${data.phone}\nEMAIL: ${data.email}`;
+    
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-date">${data.data}</span>
+        <span class="card-user">${userName}</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Gioco</div>
+          <div class="info-value">${data.game}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Età</div>
+          <div class="info-value">${data.age}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Telefono</div>
+          <div class="info-value">${data.phone}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email</div>
+          <div class="info-value">${data.email}</div>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="download-btn">Download PNG</button>
+        <button class="delete delete-btn">Elimina</button>
+      </div>
+    `;
+    
+    card.querySelector('.download-btn').onclick = () => {
+      downloadPNG(infoText, `candidatura-${d.id.substring(0,8)}.png`, 'candidatura');
+    };
+    
+    card.querySelector('.delete-btn').onclick = async () => {
+      if(confirm('Eliminare questa candidatura?')){
+        await deleteDoc(doc(db, "candidature", d.id));
+      }
+    };
+    
+    content.appendChild(card);
+  });
+});
+
+// Elimina tutto
+window.deleteAll = async function(){
+  if(!confirm("Sei sicuro di voler eliminare TUTTO? Questa azione è irreversibile!")){
+    return;
+  }
+  
+  try {
+    let snap = await getDocs(collection(db, "questions"));
+    const deletePromises = [];
+    snap.forEach(d => deletePromises.push(deleteDoc(doc(db, "questions", d.id))));
+    
+    snap = await getDocs(collection(db, "candidature"));
+    snap.forEach(d => deletePromises.push(deleteDoc(doc(db, "candidature", d.id))));
+    
+    await Promise.all(deletePromises);
+    alert("Tutto eliminato con successo!");
+  } catch(error){
+    console.error("Errore:", error);
+    alert("Errore durante l'eliminazione");
+  }
+}
+
+showSection('anon');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IQ | TEAM ヤ</title>
+<style>
+:root{
+  --bg:#0b0016;
+  --blue:#0044ff;
+  --cyan:#00d4ff;
+  --glass:rgba(255,255,255,.06);
+  --text:#fff;
+}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,#000022,#000);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:40px;
+}
+.user-bar{
+  position:fixed;
+  top:20px;
+  right:20px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  z-index:100;
+}
+.user-info{
+  background:rgba(0,68,255,.1);
+  backdrop-filter:blur(10px);
+  padding:10px 20px;
+  border-radius:12px;
+  border:1px solid rgba(0,212,255,.3);
+  color:var(--cyan);
+  font-size:.9rem;
+  font-weight:600;
+}
+.user-btn{
+  background:rgba(0,68,255,.1);
+  backdrop-filter:blur(10px);
+  padding:10px 20px;
+  border-radius:12px;
+  border:1px solid rgba(0,212,255,.3);
+  color:var(--cyan);
+  font-size:.9rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
+  text-decoration:none;
+  display:inline-block;
+}
+.user-btn:hover{
+  background:rgba(0,68,255,.2);
+  transform:translateY(-2px);
+}
+header{
+  text-align:center;
+  padding:80px 20px 40px;
+}
+h1{
+  font-size:3.5rem;
+  margin-bottom:15px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 30px rgba(0,68,255,.8);
+  animation:glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow{
+  from{filter:drop-shadow(0 0 20px rgba(0,68,255,.5));}
+  to{filter:drop-shadow(0 0 30px rgba(0,212,255,.8));}
+}
+header > p{
+  opacity:.85;
+  font-size:1.15rem;
+  margin-bottom:20px;
+  line-height:1.6;
+  max-width:700px;
+  margin-left:auto;
+  margin-right:auto;
+}
+section{
+  max-width:900px;
+  margin:0 auto;
+  padding:20px;
+}
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border-radius:24px;
+  padding:35px;
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 0 35px rgba(0,68,255,.3), inset 0 0 25px rgba(0,212,255,.05);
+  transition:.3s;
+}
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 45px rgba(0,68,255,.5);
+}
+h2{
+  color:var(--cyan);
+  margin-bottom:20px;
+  font-size:1.8rem;
+  text-shadow:0 0 15px rgba(0,212,255,.6);
+}
+.card p{
+  line-height:1.8;
+  opacity:.9;
+  font-size:1.05rem;
+}
+ul{
+  padding-left:25px;
+  line-height:2;
+  font-size:1.05rem;
+}
+ul li{
+  margin-bottom:8px;
+  opacity:.9;
+}
+.social-link{
+  color:var(--cyan);
+  text-decoration:none;
+  font-weight:600;
+  transition:.2s;
+  display:inline-block;
+}
+.social-link:hover{
+  color:#fff;
+  text-decoration:underline;
+  transform:translateX(5px);
+}
+.button-container{
+  text-align:center;
+  margin-top:40px;
+}
+a.button{
+  display:inline-block;
+  margin:10px;
+  padding:16px 35px;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:1.05rem;
+  color:#000;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  box-shadow:0 0 30px rgba(0,68,255,.7);
+  transition:.3s;
+}
+a.button:hover{
+  transform:scale(1.08) translateY(-3px);
+  box-shadow:0 0 45px rgba(0,212,255,1);
+}
+footer{
+  text-align:center;
+  padding:40px 20px;
+  opacity:.6;
+  font-size:.95rem;
+  margin-top:40px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+@media(max-width:768px){
+  h1{font-size:2.5rem;}
+  header{padding-top:100px;}
+  header > p{font-size:1rem;}
+  .card{padding:25px;}
+  h2{font-size:1.5rem;}
+  a.button{padding:14px 28px;font-size:1rem;}
+  .user-bar{flex-direction:column;top:10px;right:10px;}
+}
+</style>
+</head>
+<body>
+
+<div class="user-bar">
+  <div class="user-info" id="userInfo"></div>
+  <a href="#" class="user-btn" id="adminBtn" style="display:none;">Admin</a>
+  <a href="#" class="user-btn" id="logoutBtn">Logout</a>
+</div>
+
+<header>
+  <h1>IQ | TEAM ヤ</h1>
+  <p>Benvenuti nel sito ufficiale del nostro team! Scopri i nostri giochi, chi siamo e i nostri social.</p>
+</header>
+
+<section>
+  <div class="card">
+    <h2>Chi siamo</h2>
+    <p>Giovani. Intelligenti. Ambiziosi.</p>
+    <p>Noi dell'IQ | TEAM ヤ siamo un team che vuole emergere nel mondo dell'Esport.</p>
+    <p>Siamo un gruppo promettente e non uno nato per divertimento, siamo seri e non amiamo perdere tempo.</p>
+    <p>Speriamo di intrattenervi al meglio, anche perché abbiamo grandi idee per il futuro!</p>
+  </div>
+
+  <div class="card">
+    <h2>I nostri giochi</h2>
+    <ul>
+      <li>Clash Royale</li>
+      <li>Hollow Knight</li>
+      <li>Brawl Stars</li>
+      <li>FIFA Mobile</li>
+      <li>Minecraft</li>
+      <li>Clash of Clans</li>
+      <li>Dungeons and Dragons</li>
+      <li>Marvel Rivals</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>I nostri social</h2>
+    <ul>
+      <li><a class="social-link" href="https://whatsapp.com/channel/0029VaUuXiXEwEjwESC2iR42" target="_blank">WhatsApp</a></li>
+      <li><a class="social-link" href="https://m.twitch.tv/iqshotsbs/home" target="_blank">Twitch</a></li>
+      <li><a class="social-link" href="https://discord.gg/Z2jQQahM9F" target="_blank">Discord</a></li>
+    </ul>
+  </div>
+
+  <div class="button-container">
+    <a class="button" href="ask.html">Fai una domanda</a>
+    <a class="button" href="join.html">Join Us</a>
+  </div>
+</section>
+
+<footer>
+  © 2024 IQ | TEAM ヤ - Tutti i diritti riservati
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA_jHlu5kKMEiYOMH7SIgaSp7EVQxS49sk",
+  authDomain: "iq-team-bs.firebaseapp.com",
+  projectId: "iq-team-bs",
+  storageBucket: "iq-team-bs.appspot.com",
+  messagingSenderId: "1071412276730",
+  appId: "1:1071412276730:web:376b87b114c04b54b98843"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Lista email admin autorizzati
+const ADMIN_EMAILS = [
+  // Aggiungi qui le email degli admin
+  // Esempio: "admin@tuodominio.com"
+];
+
+// Controlla se l'utente è loggato
+const userLogged = localStorage.getItem("user_logged");
+if(!userLogged){
+  location.href = "index.html";
+}
+
+// Mostra info utente
+const userName = localStorage.getItem("user_name") || "Utente";
+const userEmail = localStorage.getItem("user_email") || "";
+document.getElementById("userInfo").textContent = userName;
+
+// Mostra pulsante Admin solo se l'utente è admin
+if(userEmail && isAdmin(userEmail)){
+  document.getElementById("adminBtn").style.display = "inline-block";
+}
+
+// Pulsante Admin
+document.getElementById("adminBtn").onclick = (e) => {
+  e.preventDefault();
+  const userEmail = localStorage.getItem("user_email");
+  
+  if(isAdmin(userEmail)){
+    location.href = "fwuvibeo.html";
+  } else {
+    alert("Non hai i permessi necessari per accedere all'area Admin");
+  }
+};
+
+// Logout
+document.getElementById("logoutBtn").onclick = async (e) => {
+  e.preventDefault();
+  
+  if(confirm("Vuoi effettuare il logout?")){
+    try {
+      await signOut(auth);
+    } catch(error) {
+      console.log("Errore logout:", error);
+    }
+    
+    localStorage.removeItem("user_logged");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_name");
+    location.href = "index.html";
+  }
+};
+
+function isAdmin(email){
+  if(!email) return false;
+  // Se la lista è vuota, nessuno è admin (sicurezza)
+  if(ADMIN_EMAILS.length === 0) return false;
+  return ADMIN_EMAILS.includes(email);
+}
+</script>
+
+</body>
+</html>
