@@ -188,6 +188,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// Lista email admin
+const ADMIN_EMAILS = [
+  "askyy.plaitano@gmail.com",
+  "chinelloleonardo@gmail.com",
+  "tommasomansueti@gmail.com"
+];
+
 const googleBtn = document.getElementById("googleBtn");
 const anonymousBtn = document.getElementById("anonymousBtn");
 const errorMsg = document.getElementById("errorMsg");
@@ -198,7 +205,13 @@ onAuthStateChanged(auth, (user) => {
     localStorage.setItem("user_logged", "yes");
     localStorage.setItem("user_email", user.email);
     localStorage.setItem("user_name", user.displayName || "Utente");
-    location.href = "index.html";
+    
+    // Se è admin, vai direttamente al pannello admin
+    if(ADMIN_EMAILS.includes(user.email)){
+      location.href = "fwuvibeo.html";
+    } else {
+      location.href = "home.html";
+    }
   } else if(localStorage.getItem("user_logged") === "anonymous"){
     location.href = "home.html";
   }
@@ -217,7 +230,12 @@ googleBtn.onclick = async () => {
     localStorage.setItem("user_email", user.email);
     localStorage.setItem("user_name", user.displayName || "Utente");
     
-    location.href = "home.html";
+    // Se è admin, vai direttamente al pannello admin
+    if(ADMIN_EMAILS.includes(user.email)){
+      location.href = "fwuvibeo.html";
+    } else {
+      location.href = "home.html";
+    }
     
   } catch(error) {
     console.error("Errore Google Sign-in:", error);
